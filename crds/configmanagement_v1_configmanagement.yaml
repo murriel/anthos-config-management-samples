@@ -11,7 +11,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-# [START anthos_config_management_crd]
+# [START anthosconfig_crd]
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
@@ -232,6 +232,13 @@ spec:
                       to an implementation-defined value. More info: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/'
                     type: object
                 type: object
+              metricsGCPServiceAccountEmail:
+                description: MetricsGCPServiceAccountEmail specifies a Google Service
+                  Account (GSA) Email with the Monitoring Metric Writer (roles/monitoring.metricWriter)
+                  IAM role. This GSA Email is used to annotate the `default` Kubernetes
+                  ServiceAccount under the `config-management-monitoring` namespace,
+                  which allows Config Sync to export metrics to Cloud Monitoring.
+                type: string
               patches:
                 items:
                   type: object
@@ -265,6 +272,14 @@ spec:
                       log all denies and dryrun failures.  No effect unless policyController
                       is enabled.  Default: false.'
                     type: boolean
+                  monitoring:
+                    description: Monitoring specifies the configuration of monitoring.
+                    properties:
+                      backends:
+                        items:
+                          type: string
+                        type: array
+                    type: object
                   mutation:
                     description: Mutation specifies the configuration of mutation.
                       This is a preview feature and may change before becoming generally
@@ -366,4 +381,4 @@ status:
     plural: ""
   conditions: []
   storedVersions: []
-# [END anthos_config_management_crd]
+# [END anthosconfig_crd]

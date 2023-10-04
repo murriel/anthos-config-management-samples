@@ -1,3 +1,5 @@
+# !/bin/bash
+
 # Copyright 2021 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -11,7 +13,8 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-# !/bin/bash
+
+# [START anthosconfig_multi_environments_kustomize_register_clusters]
 
 if [[ -z "$DEV_PROJECT" ]]; then
     echo "Must provide DEV_PROJECT in environment" 1>&2
@@ -52,13 +55,13 @@ gcloud iam service-accounts keys create dev-key.json \
   --project=${DEV_PROJECT}
 
 URI="https://container.googleapis.com/v1/projects/${DEV_PROJECT}/zones/${DEV_CLUSTER_ZONE}/clusters/dev"
-gcloud container hub memberships register dev \
+gcloud container fleet memberships register dev \
     --project=${DEV_PROJECT} \
     --gke-uri=${URI} \
     --service-account-key-file=dev-key.json
 
 gcloud config set project $DEV_PROJECT
-gcloud alpha container hub config-management enable
+gcloud beta container fleet config-management enable
 
 echo "🏁 Setting up project: ${PROD_PROJECT}"
 
@@ -75,12 +78,14 @@ gcloud iam service-accounts keys create prod-key.json \
   --project=${PROD_PROJECT}
 
 URI="https://container.googleapis.com/v1/projects/${PROD_PROJECT}/zones/${PROD_CLUSTER_ZONE}/clusters/prod"
-gcloud container hub memberships register prod \
+gcloud container fleet memberships register prod \
     --project=${PROD_PROJECT} \
     --gke-uri=${URI} \
     --service-account-key-file=prod-key.json
 
 gcloud config set project $PROD_PROJECT
-gcloud alpha container hub config-management enable
+gcloud beta container fleet config-management enable
 
 echo "⭐️ Done registering clusters."
+
+# [END anthosconfig_multi_environments_kustomize_register_clusters]

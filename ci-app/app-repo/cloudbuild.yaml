@@ -25,10 +25,10 @@ steps:
   # and consolidates every resource in a single file.
   name: 'gcr.io/kpt-dev/kpt'
   entrypoint: '/bin/sh'
-  args: ['-c', 'kpt pkg get https://github.com/GoogleCloudPlatform/anthos-config-management-samples.git/ci-app/acm-repo/cluster@1.0.0 constraints
+  args: ['-c', 'kpt pkg get https://github.com/GoogleCloudPlatform/anthos-config-management-samples.git/ci-app/acm-repo/cluster@main constraints
                   && kpt fn source constraints/ hydrated-manifests/ > hydrated-manifests/kpt-manifests.yaml']
 - id: 'Validate against policies'
   # This step validates that all resources comply with all policies.
-  name: 'gcr.io/config-management-release/policy-controller-validate'
+  name: 'gcr.io/kpt-fn/gatekeeper:v0.2'
   args: ['--input', 'hydrated-manifests/kpt-manifests.yaml']
 # [END cloudbuild_config]
